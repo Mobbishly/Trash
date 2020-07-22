@@ -7,7 +7,7 @@ const Map = () => {
 const [locations, setLocations] = useState([])
 
 useEffect(() => {
-  axios.get('http://localhost:5001/trash-2b5de/europe-west/app/api/locations')
+  axios.get('https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations')
     .then(data => setLocations(data.data))
     .catch(e => console.log(e));
     }, [])
