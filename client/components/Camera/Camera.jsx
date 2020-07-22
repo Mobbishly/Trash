@@ -2,16 +2,20 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Text, View, TouchableOpacity, ImageBackground} from 'react-native'
 import { Camera } from 'expo-camera'
+import Exif from 'react-native-exif'
+import * as Location from 'expo-location';
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraRef, setCameraRef] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
     const [photo, setPhoto] = useState(null);
+    const [location, setLocation] = useState(null);
 
     useEffect (() => {
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
+            const local = await Location.requestPermissionsAsync().status;
             setHasPermission(status === 'granted');
         })();
     }, [])
@@ -35,7 +39,10 @@ const CameraView = () => {
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={()=> {
-                    setPhoto(null);
+                    console.log(photo.exif)
+                    Exif.getExif(photo.uri)
+                        .then(msg => console.warn('OK: ' + JSON.stringify(msg)))
+                        .catch(msg => console.warn('ERROR: ' + msg))
                 }}>
                <Text style={{color: 'white'}}>Send</Text> 
             </TouchableOpacity>
@@ -53,12 +60,14 @@ const CameraView = () => {
                 <TouchableOpacity style={{alignSelf: 'center'}} onPress={async()=>{
                     if (cameraRef) {
                         let photo = await cameraRef.takePictureAsync({
-                            quality: 0.1,
-                            base64: true,
+                            quality: 0.2,
+                            base64: false,
                             exif: true
                         });
-                        console.log('photo', photo);
                         setPhoto(photo);
+                        let location = await Location.getCurrentPositionAsync({});
+                        console.log(location);
+                        setLocation(location);
                     }
                 }}>
                 <View style={{
