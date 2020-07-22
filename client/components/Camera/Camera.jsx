@@ -1,16 +1,21 @@
 
 import React, {useState, useEffect, useRef} from 'react';
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, ImageBackground} from 'react-native'
 import { Camera } from 'expo-camera'
+import Exif from 'react-native-exif'
+import * as Location from 'expo-location';
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraRef, setCameraRef] = useState(null);
     const [type, setType] = useState(Camera.Constants.Type.back);
+    const [photo, setPhoto] = useState(null);
+    const [location, setLocation] = useState(null);
 
     useEffect (() => {
         (async () => {
             const { status } = await Camera.requestPermissionsAsync();
+            const local = await Location.requestPermissionsAsync().status;
             setHasPermission(status === 'granted');
         })();
     }, [])
@@ -23,7 +28,28 @@ const CameraView = () => {
     }
     return (
        <View style= {{ flex: 1, width: '100%'}}>
-           <Camera style={{flex: 1}} type={Camera.Constants.Type.back} ref={ref => {
+           {photo ? (<ImageBackground 
+            style={{ flex: 1}}
+            source={{ uri: photo.uri}}>
+            <TouchableOpacity
+                onPress={()=> {
+                    setPhoto(null);
+                }}>
+               <Text style={{color: 'white'}}>Back</Text> 
+            </TouchableOpacity>
+            <TouchableOpacity
+                onPress={()=> {
+                    console.log(photo.exif)
+                    Exif.getExif(photo.uri)
+                        .then(msg => console.warn('OK: ' + JSON.stringify(msg)))
+                        .catch(msg => console.warn('ERROR: ' + msg))
+                }}>
+               <Text style={{color: 'white'}}>Send</Text> 
+            </TouchableOpacity>
+            </ImageBackground>
+            )
+           
+            : (<Camera style={{flex: 1}} type={Camera.Constants.Type.back} ref={ref => {
                setCameraRef(ref);
            }}>
                <View
@@ -33,8 +59,15 @@ const CameraView = () => {
                }}>
                 <TouchableOpacity style={{alignSelf: 'center'}} onPress={async()=>{
                     if (cameraRef) {
-                        let photo = await cameraRef.takePictureAsync();
-                        console.log('photo', photo);
+                        let photo = await cameraRef.takePictureAsync({
+                            quality: 0.2,
+                            base64: false,
+                            exif: true
+                        });
+                        setPhoto(photo);
+                        let location = await Location.getCurrentPositionAsync({});
+                        console.log(location);
+                        setLocation(location);
                     }
                 }}>
                 <View style={{
@@ -58,7 +91,7 @@ const CameraView = () => {
                 </View>
                 </TouchableOpacity>
                </View>
-           </Camera>
+           </Camera>)}
        </View>
     );
 }

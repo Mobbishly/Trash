@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
- import axios from 'axios';
+import axios from 'axios';
 
 const Map = () => {
 const [locations, setLocations] = useState([])
