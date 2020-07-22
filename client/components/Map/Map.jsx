@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
-import axios from 'axios';
+// import axios from 'axios';
 
 const Map = () => {
 const [locations, setLocations] = useState([])
 
 useEffect(() => {
-  axios.get('http://localhost:5001/trash-2b5de/europe-west/app/api/locations')
+  fetch('http://localhost:5001/trash-2b5de/europe-west/app/api/locations')
     .then(data => setLocations(data.data))
     .catch(e => console.log(e));
     }, [])

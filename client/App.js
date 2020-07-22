@@ -1,21 +1,42 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
+import 'react-native-gesture-handler';
+import React, {useState} from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+import { createStackNavigator } from '@react-navigation/stack';
+
 import Login from './components/Login/Login'
-import Map from './components/Map/Map'
-import CameraView from './components/Camera/Camera'
+
+import { NavigationContainer } from '@react-navigation/native';
+import Container from './components/Container/Container';
+
+
+const Stack = createStackNavigator(); 
 
 export default function App() {
+  
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+
   return (
-    <View style={styles.container}>
-      <StatusBar style="auto" />
-      <Login></Login>
-      <CameraView></CameraView>
-      {/* <Map></Map> */}
-    </View>
+        <NavigationContainer>
+          <Stack.Navigator>
+            
+            {isLoggedIn ? 
+
+            <Stack.Screen name="Trash Tagger" component={Container} />
+            :
+            <Stack.Screen name="Login">
+              {(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
+            </Stack.Screen>
+
+            
+
+
+            }
+          </Stack.Navigator>
+        </NavigationContainer>
   );
 }
-
+{(props) => <Login {...props} setIsLoggedIn={setIsLoggedIn} />}
 const styles = StyleSheet.create({
   container: {
     flex: 1,

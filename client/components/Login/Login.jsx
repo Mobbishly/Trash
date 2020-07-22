@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet } from 'react-native'
 
-function Login() {
+function Login( {setIsLoggedIn} ) {
 const [user, setUser] = useState({
     username: '',
     password: ''
 })
 const onLogin = () => {
-    console.log(user)
+    setIsLoggedIn(true)
 }
     return (
         <View style={styles.container}>
