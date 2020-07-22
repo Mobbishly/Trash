@@ -3,12 +3,14 @@ import React from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
 import Login from './components/Login/Login'
 import Map from './components/Map/Map'
+import CameraView from './components/Camera/Camera'
 
 export default function App() {
   return (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Login></Login>
+      <CameraView></CameraView>
       {/* <Map></Map> */}
     </View>
   );
