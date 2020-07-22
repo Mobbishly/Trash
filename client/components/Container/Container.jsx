@@ -6,7 +6,7 @@ import { FontAwesome5, FontAwesome, Octicons, Entypo } from '@expo/vector-icons'
 import Map from '../Map/Map' 
 import Profile from '../Profile/Profile' 
 import KarmaPoints from '../KarmaPoints/KarmaPoints'
-import Camera from '../Camera/Camera'
+import CameraView from '../Camera/Camera'
 
 const Tab = createBottomTabNavigator()
 
@@ -43,7 +43,7 @@ const Container = () => {
       />
       <Tab.Screen 
         name="Camera"
-        component={Camera} 
+        component={CameraView} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <Entypo name="camera" size={24} color="grey" />
