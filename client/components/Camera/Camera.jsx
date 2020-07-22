@@ -4,6 +4,8 @@ import { Text, View, TouchableOpacity, ImageBackground} from 'react-native'
 import { Camera } from 'expo-camera'
 import Exif from 'react-native-exif'
 import * as Location from 'expo-location';
+import axios from 'axios';
+import { v4 as uuidv4 } from 'uuid';
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -39,10 +41,17 @@ const CameraView = () => {
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={()=> {
-                    console.log(photo.exif)
-                    Exif.getExif(photo.uri)
-                        .then(msg => console.warn('OK: ' + JSON.stringify(msg)))
-                        .catch(msg => console.warn('ERROR: ' + msg))
+                    axios({
+                        method: 'post',
+                        url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
+                        data: {
+                          id: uuidv4(),
+                          lat: location.coords.latitude,
+                          long: location.coords.longitude,
+                          completed: false,
+                          uri: 'https://picsum.photos/id/237/200/300'
+                        }
+                      });
                 }}>
                <Text style={{color: 'white'}}>Send</Text> 
             </TouchableOpacity>
