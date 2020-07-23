@@ -5,13 +5,14 @@ import { Camera } from 'expo-camera'
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import firebase from '../../firebase.js'
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraRef, setCameraRef] = useState(null);
-    const [type, setType] = useState(Camera.Constants.Type.back);
     const [photo, setPhoto] = useState(null);
     const [location, setLocation] = useState(null);
+    const [imagePath, setImagePath] = useState(null);
 
     useEffect (() => {
         (async () => {
@@ -21,14 +22,28 @@ const CameraView = () => {
         })();
     }, [])
 
-    const uploadPhoto = () => {
-        let image = photo.base64;
-        const filename = uuidv4();
-        const storageRef = firebase.storage().ref();
-        const photoRef = storageRef.child(`/images/${filename}`);
+    const uploadPhoto = async () => {
+        try {
+            const response = await fetch(photo.uri);
+            const blob = await response.blob();
+            const storageRef = firebase.storage().ref().child('images/' + imagePath)
+            await storageRef.put(blob);
+            const url = await storageRef.getDownloadURL();
 
-        console.log(photoRef);
-
+            axios({
+                method: 'post',
+                url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
+                data: {
+                  id: uuidv4(),
+                  lat: location.coords.latitude,
+                  long: location.coords.longitude,
+                  completed: false,
+                  uri: url
+                }
+              });
+        } catch (error) {
+            console.log(error)
+        }
     }
 
     if (hasPermission === null) {
@@ -49,22 +64,8 @@ const CameraView = () => {
                <Text style={{color: 'white'}}>Back</Text> 
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={ ()=> {
-                    
-
-                    uploadPhoto();
-
-                    axios({
-                        method: 'post',
-                        url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
-                        data: {
-                          id: uuidv4(),
-                          lat: location.coords.latitude,
-                          long: location.coords.longitude,
-                          completed: false,
-                          uri: 'https://picsum.photos/id/237/200/300'
-                        }
-                      });
+                onPress={ async () => {
+                    await uploadPhoto();
                 }}>
                <Text style={{color: 'white'}}>Send</Text> 
             </TouchableOpacity>
@@ -85,7 +86,9 @@ const CameraView = () => {
                             quality: 0.1,
                             base64: true,
                         });
+                        const filename = uuidv4();
                         setPhoto(photo);
+                        setImagePath(filename);
                         let location = await Location.getCurrentPositionAsync({});
                         setLocation(location);
                     }
