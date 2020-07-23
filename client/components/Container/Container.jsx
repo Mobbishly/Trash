@@ -10,7 +10,8 @@ import CameraView from '../Camera/Camera'
 
 const Tab = createBottomTabNavigator()
 
-const Container = () => {
+const Container = ({user}) => {
+
   return (
       <Tab.Navigator>
         <Tab.Screen 
@@ -22,16 +23,23 @@ const Container = () => {
             ),
           }}
         />
-      <Tab.Screen 
-        name="Profile"
-        component={Profile} 
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesome name="user" size={24} color="grey" />
-          ),
-        }}
-      />
-      
+      <Tab.Screen name="Profile"
+      options={{
+        tabBarIcon: ({ color, size }) => (
+          <FontAwesome name="user" size={24} color="gray" />
+        ),
+      }}
+      >
+      {(props) => <Profile {...props} user={user} />} 
+      </Tab.Screen>
+           
+
+
+
+
+
+
+
       <Tab.Screen 
         name="Karma"
         component={KarmaPoints} 

@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 import { View, Button, TextInput, StyleSheet } from 'react-native'
 
-function Login( {setIsLoggedIn} ) {
-const [user, setUser] = useState({
-    username: '',
-    password: ''
-})
+function Login( {setIsLoggedIn, setUser, user, navigation} ) {
+
+
 const onLogin = () => {
     setIsLoggedIn(true)
 }
@@ -17,11 +15,11 @@ const onLogin = () => {
             placeholder={'Username'}
             style={styles.input} />
             <TextInput
-            value={user.password}
-            onChangeText={(password) => setUser({...user}, {password})}
-            placeholder={'Password'}
-            secureTextEntry={true}
-            style={styles.input}
+            // value={user.password}
+            // onChangeText={(password) => setUser({...user}, {password})}
+            // placeholder={'Password'}
+            // secureTextEntry={true}
+            // style={styles.input}
             />
 
             <Button
@@ -29,7 +27,13 @@ const onLogin = () => {
                 style={styles.input}
                 onPress={onLogin}
                 />
+                            <Button
+                title={'Register'}
+                style={styles.input}
+                onPress={() => navigation.navigate('RegisterUser')}
+                />
         </View>
+        
     )
 }
 const styles = StyleSheet.create({
