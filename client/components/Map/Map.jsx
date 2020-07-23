@@ -2,15 +2,26 @@ import React, { useState, useEffect } from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, Text, View, Dimensions, Image } from 'react-native';
 import axios from 'axios';
+import firebase from '../../firebase.js';
+import 'firebase/firestore';
+
+const db = firebase.firestore();
 
 const Map = () => {
 const [locations, setLocations] = useState([])
 
 useEffect(() => {
-  axios.get('https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations')
+  let data = [];
+  firebase
+    .firestore()
+    .collection("locations")
+    .onSnapshot((snapshot) => {
+      axios.get('https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations')
     .then(data => setLocations(data.data))
     .catch(e => console.log(e));
-    }, [])
+    });
+}, []);
+
   
   return (
     <View style={styles.container}>
