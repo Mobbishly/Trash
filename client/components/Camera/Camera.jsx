@@ -2,7 +2,6 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Text, View, TouchableOpacity, ImageBackground} from 'react-native'
 import { Camera } from 'expo-camera'
-import Exif from 'react-native-exif'
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -22,6 +21,16 @@ const CameraView = () => {
         })();
     }, [])
 
+    const uploadPhoto = () => {
+        let image = photo.base64;
+        const filename = uuidv4();
+        const storageRef = firebase.storage().ref();
+        const photoRef = storageRef.child(`/images/${filename}`);
+
+        console.log(photoRef);
+
+    }
+
     if (hasPermission === null) {
         return <View />;
     }
@@ -40,7 +49,11 @@ const CameraView = () => {
                <Text style={{color: 'white'}}>Back</Text> 
             </TouchableOpacity>
             <TouchableOpacity
-                onPress={()=> {
+                onPress={ ()=> {
+                    
+
+                    uploadPhoto();
+
                     axios({
                         method: 'post',
                         url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
@@ -69,13 +82,11 @@ const CameraView = () => {
                 <TouchableOpacity style={{alignSelf: 'center'}} onPress={async()=>{
                     if (cameraRef) {
                         let photo = await cameraRef.takePictureAsync({
-                            quality: 0.2,
-                            base64: false,
-                            exif: true
+                            quality: 0.1,
+                            base64: true,
                         });
                         setPhoto(photo);
                         let location = await Location.getCurrentPositionAsync({});
-                        console.log(location);
                         setLocation(location);
                     }
                 }}>
