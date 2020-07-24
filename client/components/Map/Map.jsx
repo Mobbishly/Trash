@@ -5,8 +5,6 @@ import axios from 'axios';
 import firebase from '../../firebase.js';
 import 'firebase/firestore';
 
-const db = firebase.firestore();
-
 const Map = () => {
 const [locations, setLocations] = useState([])
 
@@ -22,7 +20,6 @@ useEffect(() => {
     });
 }, []);
 
-  
   return (
     <View style={styles.container}>
         <MapView style={styles.mapStyle} provider={"google"} region={{
@@ -35,23 +32,17 @@ useEffect(() => {
            <Marker key={location.id} coordinate={{ latitude: location.lat, longitude: location.long }}>
              <Callout>
                 <View>
-                  <Text>Hello Sexy</Text>
                   <Text>
-                    <Image style={{ height: 100, width:100 }} source={{ uri: location.uri }} resizeMode="cover" />
+                    <Image style={{ height: 200, width:200 }} source={{ uri: location.uri }} resizeMode="cover" />
                   </Text>
-                  
                 </View>
             </Callout>
            </Marker>
-           
-           
          ))}
       </MapView>
       </View>
-      
   )
 }
-
 
 const styles = StyleSheet.create({
   container: {

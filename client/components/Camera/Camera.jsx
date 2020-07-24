@@ -1,6 +1,6 @@
 
-import React, {useState, useEffect, useRef} from 'react';
-import { Text, View, TouchableOpacity, ImageBackground} from 'react-native'
+import React, {useState, useEffect } from 'react';
+import { Text, View, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native'
 import { Camera } from 'expo-camera'
 import * as Location from 'expo-location';
 import axios from 'axios';
@@ -75,13 +75,7 @@ const CameraView = () => {
                     bottom: 20
                 }}
                 >
-               <Text style={{
-                color: 'white',
-                fontSize: 18,
-                fontWeight: 'bold',
-                alignSelf: 'center',
-                textTransform: 'uppercase'
-                }}>Back</Text> 
+               <Text style={styles.backbtn}>Back</Text> 
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={ async () => {
@@ -101,13 +95,7 @@ const CameraView = () => {
                     bottom: 20
                 }}
                 >
-               <Text style={{
-                   color: 'white',
-                   fontSize: 18,
-                   fontWeight: 'bold',
-                   alignSelf: 'center',
-                   textTransform: 'uppercase'
-                   }}>Upload</Text> 
+               <Text style={styles.uploadbtn}>Upload</Text> 
             </TouchableOpacity>
             </ImageBackground>
             )
@@ -133,37 +121,53 @@ const CameraView = () => {
                         setLocation(location);
                     }
                 }}>
-                <View style={{
-                    flex: 1,
-                    justifyContent: 'flex-end',
-                    marginBottom: 36
-                }}>
-                <View style={{
-                    borderWidth: 2,
-                    borderRadius: "10%",
-                    borderColor: 'white',
-                    height: 50,
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'}}
-                    >
+                    <View style={styles.shutterBtnCont}>
                         <View style={{
                             borderWidth: 2,
-                            borderRadius: "50%",
-                            boarderColor: 'white',
-                            height: 40,
-                            width: 40,
-                            backgroundColor: 'white'
-                        }}>
+                            borderRadius: "10%",
+                            borderColor: 'white',
+                            height: 50,
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'}}
+                            >
+                                <View style={{
+                                    borderWidth: 2,
+                                    borderRadius: "50%",
+                                    boarderColor: 'white',
+                                    height: 40,
+                                    width: 40,
+                                    backgroundColor: 'white'
+                                }}>
+                            </View>
+                        </View>
                     </View>
-                </View>
-                </View>
                 </TouchableOpacity>
                </View>
            </Camera>)}
        </View>
     );
 }
-
+const styles = StyleSheet.create({
+    backbtn: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        textTransform: 'uppercase'
+    },
+    uploadbtn: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold',
+        alignSelf: 'center',
+        textTransform: 'uppercase'
+        },
+    shutterBtnCont: {
+        flex: 1,
+        justifyContent: 'flex-end',
+        marginBottom: 36
+    }
+})
 export default CameraView
 
