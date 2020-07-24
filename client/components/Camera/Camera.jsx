@@ -6,6 +6,7 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import firebase from '../../firebase.js'
+import { preventAutoHide } from 'expo/build/launch/SplashScreen';
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -60,14 +61,53 @@ const CameraView = () => {
             <TouchableOpacity
                 onPress={()=> {
                     setPhoto(null);
-                }}>
-               <Text style={{color: 'white'}}>Back</Text> 
+                }}
+                style={{
+                    elevation: 8,
+                    borderRadius: 10,
+                    paddingVertical: 10,
+                    paddingHorizontal: 12,
+                    backgroundColor: '#D65F56',
+                    height: 45,
+                    width: 120,
+                    position: 'absolute',
+                    left: 20,
+                    bottom: 20
+                }}
+                >
+               <Text style={{
+                color: 'white',
+                fontSize: 18,
+                fontWeight: 'bold',
+                alignSelf: 'center',
+                textTransform: 'uppercase'
+                }}>Back</Text> 
             </TouchableOpacity>
             <TouchableOpacity
                 onPress={ async () => {
                     await uploadPhoto();
-                }}>
-               <Text style={{color: 'white'}}>Send</Text> 
+                    setPhoto(null);
+                }}
+                style={{
+                    elevation: 8,
+                    borderRadius: 10,
+                    paddingVertical: 10,
+                    paddingHorizontal: 12,
+                    backgroundColor: '#148744',
+                    height: 45,
+                    width: 120,
+                    position: 'absolute',
+                    right: 20,
+                    bottom: 20
+                }}
+                >
+               <Text style={{
+                   color: 'white',
+                   fontSize: 18,
+                   fontWeight: 'bold',
+                   alignSelf: 'center',
+                   textTransform: 'uppercase'
+                   }}>Upload</Text> 
             </TouchableOpacity>
             </ImageBackground>
             )
@@ -94,8 +134,13 @@ const CameraView = () => {
                     }
                 }}>
                 <View style={{
+                    flex: 1,
+                    justifyContent: 'flex-end',
+                    marginBottom: 36
+                }}>
+                <View style={{
                     borderWidth: 2,
-                    borderRadius: "50%",
+                    borderRadius: "10%",
                     borderColor: 'white',
                     height: 50,
                     display: 'flex',
@@ -111,6 +156,7 @@ const CameraView = () => {
                             backgroundColor: 'white'
                         }}>
                     </View>
+                </View>
                 </View>
                 </TouchableOpacity>
                </View>
