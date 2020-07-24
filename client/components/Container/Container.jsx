@@ -1,45 +1,38 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import { NavigationContainer } from '@react-navigation/native'
+import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { FontAwesome5, FontAwesome, Octicons, Entypo } from '@expo/vector-icons'
-import Map from '../Map/Map' 
-import Profile from '../Profile/Profile' 
-import KarmaPoints from '../KarmaPoints/KarmaPoints'
-import CameraView from '../Camera/Camera'
+import { FontAwesome5, FontAwesome, Octicons, Entypo } from '@expo/vector-icons';
+import Map from '../Map/Map';
+import Profile from '../Profile/Profile';
+import KarmaPoints from '../KarmaPoints/KarmaPoints';
+import CameraView from '../Camera/Camera';
 
 const Tab = createBottomTabNavigator()
 
 const Container = ({user}) => {
-
   return (
-      <Tab.Navigator>
-        <Tab.Screen 
-          name="Map"
-          component={Map} 
-          options={{
-            tabBarIcon: ({ color, size }) => (
-              <FontAwesome5 name="map-marker-alt" size={24} color="gray" />
-            ),
-          }}
-        />
-      <Tab.Screen name="Profile"
+    <Tab.Navigator>
+      <Tab.Screen 
+        name="Map"
+        component={Map} 
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <FontAwesome5 name="map-marker-alt" size={24} color="gray" />
+          ),
+        }}
+      />
+      <Tab.Screen 
+      name="Profile"
       options={{
         tabBarIcon: ({ color, size }) => (
           <FontAwesome name="user" size={24} color="gray" />
         ),
+        headerShown: false
+
       }}
       >
-      {(props) => <Profile {...props} user={user} />} 
+        {(props) => <Profile {...props} user={user} />} 
       </Tab.Screen>
-           
-
-
-
-
-
-
-
+  
       <Tab.Screen 
         name="Karma"
         component={KarmaPoints} 
@@ -49,6 +42,7 @@ const Container = ({user}) => {
           ),
         }}
       />
+
       <Tab.Screen 
         name="Camera"
         component={CameraView} 
@@ -58,8 +52,7 @@ const Container = ({user}) => {
           ),
         }}
         />
-      </Tab.Navigator>
-
+    </Tab.Navigator>
     )
 }
 

@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Text, View, TextInput, Button, StyleSheet } from 'react-native'
 import axios from 'axios'
 
-
 const RegisterUser = ({navigation}) => {
 const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')
@@ -12,7 +11,7 @@ const [email, setEmail] = useState('')
 const register = () => {
   axios({
     method: 'post',
-    url: 'http://localhost:5001/trash-2b5de/us-central1/app/api/users/',
+    url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users/',
     data: {
       username: username,
       firstName: firstName,
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
   },
   header: {
     marginBottom: 20,
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: 'bold'
   },
   input: {
