@@ -24,7 +24,7 @@ export default function App() {
             }
           }
         >
-          {(props) => <Container {...props} user={user}/>}
+          {(props) => <Container {...props} user={user} setIsLoggedIn={setIsLoggedIn}/>}
         </Stack.Screen>
         :
         <Stack.Screen 

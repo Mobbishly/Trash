@@ -23,7 +23,8 @@ app.post('/api/locations', (req, res) => {
                   lat: req.body.lat,
                   long: req.body.long,
                   completed: req.body.completed,
-                  uri: req.body.uri
+                  uri: req.body.uri,
+                  user: req.body.user
             });
           return res.status(200).send();
         } catch (error) {
@@ -46,7 +47,8 @@ app.get('/api/locations', (req, res) => {
                     lat: doc.data().lat,
                     long: doc.data().long,
                     completed: doc.data().completed,
-                    uri: doc.data().uri
+                    uri: doc.data().uri,
+                    user: doc.data().user
                 };
                 response.push(selectedItem);
             }
@@ -68,7 +70,8 @@ app.get('/api/locations', (req, res) => {
                 firstName: req.body.firstName,
                 lastName: req.body.lastName,
                 email: req.body.email,
-                karmaPoints: req.body.karmaPoints
+                karmaPoints: req.body.karmaPoints,
+                password: req.body.password,
           });
               return res.status(200).send();
           } catch (error) {
@@ -91,7 +94,9 @@ app.get('/api/locations', (req, res) => {
                         firstName: doc.data().firstName,
                         karmaPoints: doc.data().karmaPoints,
                         lastName: doc.data().lastName,
-                        username: doc.data().username
+                        username: doc.data().username,
+                        
+                        
                     };
                     response.push(selectedUsers);
                 }
@@ -107,18 +112,17 @@ app.get('/api/locations', (req, res) => {
       app.get('/api/users/:id', (req, res) => {
         (async () => {
             try {
-              console.log(req.params)
                 let query = db.collection('users').doc(req.params.id);
                 let response = [];
                 await query.get().then(querySnapshot => {
                 let doc = querySnapshot.data();
-                console.log(doc)
                     const selectedUser = {
                         username: doc.username,
                         firstName: doc.firstName,
                         lastName: doc.lastName,
                         email: doc.email,
-                        karmaPoints: doc.karmaPoints
+                        karmaPoints: doc.karmaPoints,
+                        password: doc.password
                     };
                     response.push(selectedUser);
                 

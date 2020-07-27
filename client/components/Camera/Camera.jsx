@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import firebase from '../../firebase.js'
 import { preventAutoHide } from 'expo/build/launch/SplashScreen';
 
-const CameraView = () => {
+const CameraView = ({user}) => {
     const [hasPermission, setHasPermission] = useState(null);
     const [cameraRef, setCameraRef] = useState(null);
     const [photo, setPhoto] = useState(null);
@@ -39,7 +39,8 @@ const CameraView = () => {
                   lat: location.coords.latitude,
                   long: location.coords.longitude,
                   completed: false,
-                  uri: url
+                  uri: url,
+                  user: user  
                 }
               });
         } catch (error) {

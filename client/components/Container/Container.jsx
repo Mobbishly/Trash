@@ -8,7 +8,8 @@ import CameraView from '../Camera/Camera';
 
 const Tab = createBottomTabNavigator()
 
-const Container = ({user}) => {
+const Container = ({user, setIsLoggedIn}) => {
+  
   return (
     <Tab.Navigator>
       <Tab.Screen 
@@ -30,7 +31,7 @@ const Container = ({user}) => {
 
       }}
       >
-        {(props) => <Profile {...props} user={user} />} 
+        {(props) => <Profile {...props} user={user} setIsLoggedIn={setIsLoggedIn} />} 
       </Tab.Screen>
   
       <Tab.Screen 
@@ -45,13 +46,15 @@ const Container = ({user}) => {
 
       <Tab.Screen 
         name="Camera"
-        component={CameraView} 
+   
         options={{
           tabBarIcon: ({ color, size }) => (
             <Entypo name="camera" size={24} color="grey" />
           ),
         }}
-        />
+        >
+          {(props) => <CameraView {...props} user={user}  />} 
+        </Tab.Screen>
     </Tab.Navigator>
     )
 }

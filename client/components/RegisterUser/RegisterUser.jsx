@@ -7,6 +7,7 @@ const [username, setUsername] = useState('')
 const [firstName, setFirstName] = useState('')
 const [lastName, setLastName] = useState('')
 const [email, setEmail] = useState('')
+const [ password, setPassword ] = useState('')
 
 const register = () => {
   axios({
@@ -17,6 +18,7 @@ const register = () => {
       firstName: firstName,
       lastName: lastName,
       email: email,
+      password: password,
       karmaPoints: 0
     }
   });
@@ -49,6 +51,13 @@ const register = () => {
         value={email}
         onChangeText={(email)=> setEmail(email)}
         placeholder={'Email'}
+        style={styles.input}
+        />
+        <TextInput
+        value={password}
+        onChangeText={(password)=> setPassword(password)}
+        placeholder={'Password'}
+        secureTextEntry={true}
         style={styles.input}
         />
       <Button
