@@ -20,6 +20,7 @@
     "expo-location": "^8.3.0",
     "expo-permissions": "~9.0.1",
     "expo-status-bar": "^1.0.2",
+    "firebase": "7.9.0",
     "firebase-admin": "^9.0.0",
     "link": "^0.1.5",
     "react": "~16.11.0",
@@ -29,13 +30,13 @@
     "react-native-exif": "^0.4.0",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-maps": "0.27.1",
+    "react-native-progress": "^4.1.2",
     "react-native-reanimated": "~1.9.0",
     "react-native-safe-area-context": "~3.0.7",
     "react-native-screens": "~2.9.0",
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.4.0",
-    "uuidv4": "^6.2.0",
-    "firebase": "7.9.0"
+    "uuidv4": "^6.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",

@@ -1,12 +1,13 @@
 
 import React, {useState, useEffect } from 'react';
-import { Text, View, TouchableOpacity, ImageBackground, StyleSheet} from 'react-native'
+import { Text, View, TouchableOpacity, ImageBackground, StyleSheet, Alert} from 'react-native'
 import { Camera } from 'expo-camera'
 import * as Location from 'expo-location';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import firebase from '../../firebase.js'
 import { preventAutoHide } from 'expo/build/launch/SplashScreen';
+import * as Progress from 'react-native-progress';
 
 const CameraView = () => {
     const [hasPermission, setHasPermission] = useState(null);
@@ -14,6 +15,8 @@ const CameraView = () => {
     const [photo, setPhoto] = useState(null);
     const [location, setLocation] = useState(null);
     const [imagePath, setImagePath] = useState(null);
+    const [progress, setProgress] = useState(null);
+    const [uploadComplete, setUploadComplete] = useState(true);
 
     useEffect (() => {
         (async () => {
@@ -28,20 +31,39 @@ const CameraView = () => {
             const response = await fetch(photo.uri);
             const blob = await response.blob();
             const storageRef = firebase.storage().ref().child('images/' + imagePath)
-            await storageRef.put(blob);
-            const url = await storageRef.getDownloadURL();
+            setUploadComplete(false)
+            storageRef.put(blob)
+                .on('state_changed', snapshot => {
+                    let progress1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                    console.log(progress1)
+                    setProgress(progress1);
+                    switch (snapshot.state) {
+                        case firebase.storage.TaskState.PAUSED:
+                            break;
+                        case firebase.storage.TaskState.RUNNING:
+                            break;
+                    }
+                }, error => {
+                    console.log(error)
+                }, async () => {
+                    if (progress === 100) {
+                        Alert.alert('Upload', 'Upload Completed', [{ text: 'OK', onPress: () => {setUploadComplete('true')}}]);    
+                    }
 
-            axios({
-                method: 'post',
-                url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
-                data: {
-                  id: uuidv4(),
-                  lat: location.coords.latitude,
-                  long: location.coords.longitude,
-                  completed: false,
-                  uri: url
-                }
-              });
+                    let url = await storageRef.getDownloadURL();
+                    await axios({
+                        method: 'post',
+                        url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
+                        data: {
+                          id: uuidv4(),
+                          lat: location.coords.latitude,
+                          long: location.coords.longitude,
+                          completed: false,
+                          uri: url,
+                          user: 'Admin'
+                        }
+                    })
+                  });
         } catch (error) {
             console.log(error)
         }
@@ -54,7 +76,7 @@ const CameraView = () => {
         return <Text>No access to camera</Text>;
     }
     return (
-       <View style= {{ flex: 1, width: '100%'}}>
+       <View style= {{ flex: 1, width: '100%'}}> 
            {photo ? (<ImageBackground 
             style={{ flex: 1}}
             source={{ uri: photo.uri}}>
@@ -97,6 +119,7 @@ const CameraView = () => {
                 >
                <Text style={styles.uploadbtn}>Upload</Text> 
             </TouchableOpacity>
+            
             </ImageBackground>
             )
            
@@ -108,6 +131,7 @@ const CameraView = () => {
                    flex: 1,
                    alignSelf: 'center'
                }}>
+                {uploadComplete === false ? <Progress.Bar progress={progress} width={200} style={{position: 'relative', top: 75}} /> : <View />}
                 <TouchableOpacity style={{alignSelf: 'center'}} onPress={async()=>{
                     if (cameraRef) {
                         let photo = await cameraRef.takePictureAsync({
