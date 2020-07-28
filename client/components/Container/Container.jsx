@@ -14,13 +14,16 @@ const Container = ({user, setIsLoggedIn}) => {
     <Tab.Navigator>
       <Tab.Screen 
         name="Map"
-        component={Map} 
         options={{
           tabBarIcon: ({ color, size }) => (
             <FontAwesome5 name="map-marker-alt" size={24} color="gray" />
           ),
         }}
-      />
+        >
+          {(props) => <Map {...props} user={user}  />} 
+        </Tab.Screen>
+
+
       <Tab.Screen 
       name="Profile"
       options={{

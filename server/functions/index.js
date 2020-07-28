@@ -61,6 +61,36 @@ app.get('/api/locations', (req, res) => {
         })();
     });
 
+    app.put('/api/locations/:location_id', (req, res) => {
+        (async () => {
+            try {
+                const document = db.collection('locations').doc('/' + req.body.id + '/');
+                await document.update({
+                    completed: req.body.completed
+                });
+                return res.status(200).send();
+            } catch (error) {
+                console.log(error);
+                return res.status(500).send(error);
+            }
+            })();
+        });
+
+        app.put('/api/users/:user', (req, res) => {
+            (async () => {
+                try {
+                    const document = db.collection('users').doc('/' + req.params.user + '/');
+                    await document.update({
+                        karmaPoints: req.body.karmaPoints
+                    });
+                    return res.status(200).send();
+                } catch (error) {
+                    console.log(error);
+                    return res.status(500).send(error);
+                }
+                })();
+            });
+
     app.post('/api/users', (req, res) => {
       (async () => {
           try {
@@ -95,8 +125,6 @@ app.get('/api/locations', (req, res) => {
                         karmaPoints: doc.data().karmaPoints,
                         lastName: doc.data().lastName,
                         username: doc.data().username,
-                        
-                        
                     };
                     response.push(selectedUsers);
                 }

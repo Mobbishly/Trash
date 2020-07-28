@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "trash-2b5de"
+    "default": "trash-2b5de",
+    "trashtagger": "trash-2b5de"
   }
 }
