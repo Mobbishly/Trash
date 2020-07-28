@@ -31,11 +31,11 @@ const CameraView = ({user}) => {
             const response = await fetch(photo.uri);
             const blob = await response.blob();
             const storageRef = firebase.storage().ref().child('images/' + imagePath)
+            console.log(progress)
             setUploadComplete(false)
             storageRef.put(blob)
                 .on('state_changed', snapshot => {
                     let progress1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    console.log(progress1)
                     setProgress(progress1);
                     switch (snapshot.state) {
                         case firebase.storage.TaskState.PAUSED:
@@ -46,8 +46,8 @@ const CameraView = ({user}) => {
                 }, error => {
                     console.log(error)
                 }, async () => {
-                    if (progress === 100) {
-                        Alert.alert('Upload', 'Upload Completed', [{ text: 'OK', onPress: () => {setUploadComplete('true')}}]);    
+                    if (progress === 100 || progress === null) {
+                        Alert.alert('Upload', 'Upload Complete', [{ text: 'OK', onPress: () => {setUploadComplete('true')}}]);    
                     }
 
                     let url = await storageRef.getDownloadURL();
@@ -153,7 +153,8 @@ const CameraView = ({user}) => {
                             height: 50,
                             display: 'flex',
                             justifyContent: 'center',
-                            alignItems: 'center'}}
+                            alignItems: 'center',
+                            }}
                             >
                                 <View style={{
                                     borderWidth: 2,
