@@ -70,7 +70,6 @@ const CameraView = ({user}) => {
                     body: JSON.stringify(body),
                   });
                   const parsed = await response.json();
-                console.log(parsed.responses[0].safeSearchAnnotation.adult)
                   if(parsed.responses[0].safeSearchAnnotation.adult === 'VERY_LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.adult === 'LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.adult === 'POSSIBLE'
@@ -85,7 +84,6 @@ const CameraView = ({user}) => {
                       alert('Your image is not appropriate. Please try again')
                     } else {
                       const storageRef = firebase.storage().ref().child('images/' + imagePath)
-                      console.log(progress)
                       setUploadComplete(false)
                       storageRef.put(blob)
                           .on('state_changed', snapshot => {

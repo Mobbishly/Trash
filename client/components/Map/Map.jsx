@@ -7,7 +7,7 @@ import 'firebase/firestore';
 
 const Map = ({user}) => {
 const [locations, setLocations] = useState([])
-const [modalVisible, setModalVisible] = useState(false);
+const [modalVisible, setModalVisible] = useState();
 
 useEffect(() => {
   let data = [];
@@ -33,7 +33,7 @@ useEffect(() => {
             <Modal
             animationType="slide"
             transparent={true}
-            visible={modalVisible}
+            visible={modalVisible === location.id}
             onRequestClose={()=>{
                 Alert.alert("Modal has been closed.")
             }}
@@ -43,14 +43,14 @@ useEffect(() => {
                     <Text style={styles.modalText}>{}</Text>
                       <Text>Upload by {location.user}</Text>
                       <Image style={{ height: 300, width: 250 }} source={{ uri: location.uri }} resizeMode="contain" />
-                     
+                    
                         <TouchableHighlight style={{...styles.openButton}} onPress={()=>{
                             setModalVisible(!modalVisible);
                         }}>
                             <Text style={styles.textStyle}>X</Text>
                         </TouchableHighlight>
                         
-                        <TouchableHighlight style={{
+                        {location.completed ? <Text>All cleaned up :) </Text> : <TouchableHighlight style={{
                           backgroundColor: '#148744', 
                           height: 45, 
                           width: 120, 
@@ -82,12 +82,13 @@ useEffect(() => {
                             color: 'white',
                             fontSize: 18,
                           }}>Task Done</Text>
-                        </TouchableHighlight>
+                        </TouchableHighlight>}
                     </View>
                 </View>
+                
             </Modal>
-           {location.completed ? <Marker onPress={() => setModalVisible(true)} pinColor={'#148744'} key={location.id} coordinate={{ latitude: location.lat, longitude: location.long }}>
-           </Marker> : <Marker onPress={() => setModalVisible(true)} pinColor={'#D65F56'} key={location.id} coordinate={{ latitude: location.lat, longitude: location.long }}>
+           {location.completed ? <Marker onPress={() => setModalVisible(location.id)} pinColor={'#148744'} key={location.id} coordinate={{ latitude: location.lat, longitude: location.long }}>
+           </Marker> : <Marker onPress={() => setModalVisible(location.id)} pinColor={'#D65F56'} key={location.id} coordinate={{ latitude: location.lat, longitude: location.long }}>
            </Marker>}
            </View>
          ))}

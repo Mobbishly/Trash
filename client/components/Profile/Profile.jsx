@@ -1,23 +1,34 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, Button, ScrollView } from 'react-native';
 import Axios from 'axios';
+import firebase from '../../firebase.js';
 
 const Profile = ({user, setIsLoggedIn}) => {
   const [userData, setUserData] = useState([])
   const [images, setImages] = useState([])
 
   useEffect(() => {
+    firebase
+    .firestore()
+    .collection("users")
+    .onSnapshot((snapshot) => {
     Axios.get(`https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users/${user}`)
     .then(res => setUserData(res.data[0]))
+    })
     return () => {
     }
   }, [])
 
   useEffect(() => {
-   
+    firebase
+    .firestore()
+    .collection("locations")
+    .onSnapshot((snapshot) => {
     Axios.get(`https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations`)
     .then(res => res.data.filter(x => x.user === user))
     .then(res => setImages(res))
+    .catch(e => console.log(e));
+    })
     return () => {
     }
   }, [])

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import Axios from 'axios'
 import EStyleSheet from 'react-native-extended-stylesheet';
+import firebase from '../../firebase.js';
 
 const KarmaPoints = () => {
   const [sortedPoints, setSortedPoints] = useState([])
@@ -12,8 +13,13 @@ const KarmaPoints = () => {
   }, [points])
 
   useEffect(() => {
+    firebase
+    .firestore()
+    .collection("locations")
+    .onSnapshot((snapshot) => {
     Axios.get(`https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users`)
     .then(res => setPoints(res.data))
+    })
   }, [])
 
   return (
