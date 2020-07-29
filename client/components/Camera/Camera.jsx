@@ -30,40 +30,102 @@ const CameraView = ({user}) => {
         try {
             const response = await fetch(photo.uri);
             const blob = await response.blob();
-            const storageRef = firebase.storage().ref().child('images/' + imagePath)
-            console.log(progress)
-            setUploadComplete(false)
-            storageRef.put(blob)
-                .on('state_changed', snapshot => {
-                    let progress1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-                    setProgress(progress1);
-                    switch (snapshot.state) {
-                        case firebase.storage.TaskState.PAUSED:
-                            break;
-                        case firebase.storage.TaskState.RUNNING:
-                            break;
-                    }
-                }, error => {
-                    console.log(error)
-                }, async () => {
-                    if (progress === 100 || progress === null) {
-                        Alert.alert('Upload', 'Upload Complete', [{ text: 'OK', onPress: () => {setUploadComplete('true')}}]);    
-                    }
 
-                    let url = await storageRef.getDownloadURL();
-                    await axios({
-                        method: 'post',
-                        url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
-                        data: {
-                          id: uuidv4(),
-                          lat: location.coords.latitude,
-                          long: location.coords.longitude,
-                          completed: false,
-                          uri: url,
-                          user: user
-                        }
-                    })
+            //converting blob to base 64
+            var reader = new FileReader();
+            reader.readAsDataURL(blob); 
+            reader.onloadend = function() {
+                var base64data = reader.result;            
+           
+                const API_KEY = 'AIzaSyByFev4TGGQQW9leJiMUTdtfGl_YD4Jnb8';
+                const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`
+                
+                async function callGoogleVisionAsync(image) {
+                  const body = {
+                    requests: [
+                      {
+                        image: {
+                          content: image,
+                        },
+                        features: [
+                          // {
+                          //   type: 'LABEL_DETECTION',
+                          //   maxResults: 5,
+                          // },
+                          {
+                            type: "SAFE_SEARCH_DETECTION",
+                            maxResults: 1
+                        },
+                        ]
+                      },
+                    ],
+                  };
+                
+                  const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                      'Accept': 'application/json',
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(body),
                   });
+                  const parsed = await response.json();
+                console.log(parsed.responses[0].safeSearchAnnotation.adult)
+                  if(parsed.responses[0].safeSearchAnnotation.adult === 'VERY_LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.adult === 'LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.adult === 'POSSIBLE'
+                    || parsed.responses[0].safeSearchAnnotation.racy === 'VERY_LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.racy === 'LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.racy === 'POSSIBLE'
+                    || parsed.responses[0].safeSearchAnnotation.violence === 'VERY_LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.violence === 'LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.violence === 'POSSIBLE'
+                  
+                    ) {
+                      alert('Your image is not appropriate. Please try again')
+                    } else {
+                      const storageRef = firebase.storage().ref().child('images/' + imagePath)
+                      console.log(progress)
+                      setUploadComplete(false)
+                      storageRef.put(blob)
+                          .on('state_changed', snapshot => {
+                              let progress1 = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                              setProgress(progress1);
+                              switch (snapshot.state) {
+                                  case firebase.storage.TaskState.PAUSED:
+                                      break;
+                                  case firebase.storage.TaskState.RUNNING:
+                                      break;
+                              }
+                          }, error => {
+                              console.log(error)
+                          }, async () => {
+                              if (progress === 100 || progress === null) {
+                                  Alert.alert('Upload', 'Upload Complete', [{ text: 'OK', onPress: () => {setUploadComplete('true')}}]);    
+                              }
+          
+                              let url = await storageRef.getDownloadURL();
+                              await axios({
+                                  method: 'post',
+                                  url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/locations',
+                                  data: {
+                                    id: uuidv4(),
+                                    lat: location.coords.latitude,
+                                    long: location.coords.longitude,
+                                    completed: false,
+                                    uri: url,
+                                    user: user
+                                  }
+                              })
+                            });
+                    }
+                
+                  return parsed.responses[0];
+                }
+            
+                callGoogleVisionAsync(base64data.slice(23))
+            }   
+           
         } catch (error) {
             console.log(error)
         }
