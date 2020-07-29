@@ -5,39 +5,6 @@ const cors = require('cors');
 const app = express();
 const serviceAccount = require("./permissions.json");
 
-const vision = require('@google-cloud/vision');
-
-const VERY_UNLIKELY = 'VERY_UNLIKELY';
-const BLURRED_FOLDER = 'blurred';
-
-
-exports.blurOffensiveImages = functions.storage.object().onFinalize(async (object) => {
-
-  const visionClient = new vision.ImageAnnotatorClient();
-  const data = await visionClient.safeSearchDetection(
-    `gs://${object.bucket}/${object.name}`
-  );
-
-  const safeSearch = data[0].safeSearchAnnotation;
-  console.log('SafeSearch results on image', safeSearch);
-
-
-if (
-    safeSearch.adult !== VERY_UNLIKELY ||
-    safeSearch.spoof !== VERY_UNLIKELY ||
-    safeSearch.medical !== VERY_UNLIKELY ||
-    safeSearch.violence !== VERY_UNLIKELY ||
-    safeSearch.racy !== VERY_UNLIKELY
-  ) {
-
-    var defaultStorage = admin.storage();
-    const bucket = defaultStorage.bucket(object.bucket);
-    const file = bucket.file(object.name);
-    return file.delete();
-  }
-  return null;
-});
-
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
   databaseURL: "https://trash-2b5de.firebaseio.com"
