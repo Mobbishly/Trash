@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Image } from 'react-native'
 import Axios from 'axios'
-import EStyleSheet from 'react-native-extended-stylesheet';
 import firebase from '../../firebase.js';
 
 const KarmaPoints = () => {
@@ -15,7 +14,7 @@ const KarmaPoints = () => {
   useEffect(() => {
     firebase
     .firestore()
-    .collection("locations")
+    .collection("users")
     .onSnapshot((snapshot) => {
     Axios.get(`https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users`)
     .then(res => setPoints(res.data))
@@ -28,68 +27,78 @@ const KarmaPoints = () => {
         <Text style={styles.headingText}>User</Text>
         <Text style={styles.headingText}>Karma</Text>
       </View>
-      <ScrollView >
-    {sortedPoints.map((x, index) => (
-      <View key={index} style={styles.row}>
-        <Text style={styles.text}>{x.username}</Text>
-        <Text style={styles.text}>{x.karmaPoints}</Text>
-      </View>
-      ))}
-      </ScrollView>
-
+      <FlatList 
+      data={sortedPoints}
+      renderItem={({ item }) =>
+       <View style={styles.row}>
+         <View style={styles.userContainer}>
+         <Image style={styles.image} source={{uri: 'https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_1280.jpg'}} />
+        <Text style={styles.username}>{item.username}</Text>
+        </View>
+        <Text style={styles.karmaPoints}>{item.karmaPoints}</Text>
+      </View> 
+      }
+      keyExtractor={item => item.username}
+      >
+      </FlatList>
     </View>
   )
 }
 
 const styles = StyleSheet.create({
-  container : {
-    padding: 50,
-   
+  container: {
+    backgroundColor: 'lightgrey',
+    height: '100%'
+  },
+  heading: {
+    borderColor: 'lightblue',
+    alignItems: 'center',
+    flexDirection: 'row',
+    paddingLeft: 50,
+    paddingRight: 40,
+    justifyContent: 'space-between',
+    width: '100%',
+    backgroundColor: '#41bdb0',
+    height: 160,
+    textAlign: 'center',
+  },
+  headingText: {
+    textAlignVertical: 'center',
+    paddingTop: 40,
+    fontSize: 40,
+    color: 'white'
   },
   row: {
     flex: 1,
     flexDirection: 'row',
-    justifyContent: "space-between",
-    padding: 10,
-
-    borderWidth: 2,
-    borderRadius: 10,
-    borderColor: 'lightgrey',
-    backgroundColor: '#7873A2',
-    shadowColor: "#000",
-    shadowOffset: {
-    width: 0,
-	  height: 1,
-    },
-    shadowOpacity: 0.87,
-    shadowRadius: 0.65,
-
-    elevation: 2,
-    
+    width: '100%',
+    justifyContent: 'space-between',
+    paddingLeft: 40,
+    paddingRight: 40,
+    backgroundColor: 'lightgrey',
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
+    paddingBottom: 10,
+    paddingTop: 10
   },
-  heading: {
-    flex: 0,
+  karmaPoints: {
+    fontSize: 25,
+    alignSelf: 'center'
+  },
+  username: {
+    fontSize: 25,
+    paddingLeft: 15
+  },
+  image: {
+    height: 50,
+    width: 50,
+    borderRadius: 100,
+  },
+  userContainer: {
+    flex: 1,
     flexDirection: 'row',
-    justifyContent: "space-between",
-    marginBottom: 10,
-    backgroundColor: '#7873A2',
-    marginLeft: -40,
-    marginRight: -40,
-    marginTop: -30,
-
-    
-  },
-  text: {
-    fontSize: 20,
-    color: 'white'
-  },
-  headingText: {
-    fontWeight: 'bold',
-    fontSize: 40,
-    padding: 40,
-    color: 'white'
-
+    alignItems: 'center'
   }
-});
+})
 
 export default KarmaPoints

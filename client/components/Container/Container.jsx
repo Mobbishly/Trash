@@ -1,6 +1,7 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { FontAwesome5, FontAwesome, Octicons, Entypo } from '@expo/vector-icons';
+import { StyleSheet } from 'react-native';
 import Map from '../Map/Map';
 import Profile from '../Profile/Profile';
 import KarmaPoints from '../KarmaPoints/KarmaPoints';
@@ -11,7 +12,8 @@ const Tab = createBottomTabNavigator()
 const Container = ({user, setIsLoggedIn}) => {
   
   return (
-    <Tab.Navigator>
+    <Tab.Navigator style={styles.nav}>
+      
       <Tab.Screen 
         name="Map"
         options={{
@@ -61,5 +63,15 @@ const Container = ({user, setIsLoggedIn}) => {
     </Tab.Navigator>
     )
 }
+
+const styles = StyleSheet.create({
+  button: {
+
+    backgroundColor: '#223148',
+
+},
+
+  });
+
 
 export default Container

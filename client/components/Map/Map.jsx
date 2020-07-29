@@ -41,21 +41,21 @@ useEffect(() => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                     <Text style={styles.modalText}>{}</Text>
-                      <Text>Upload by {location.user}</Text>
-                      <Image style={{ height: 300, width: 250 }} source={{ uri: location.uri }} resizeMode="contain" />
+                      <Text style={styles.uploadedBy}>Tagged by {location.user}</Text>
+                      <Image style={{ height: 300, width: 250 }} source={{ uri: location.uri }} resizeMode="cover" />
                     
-                        <TouchableHighlight style={{...styles.openButton}} onPress={()=>{
+                        <TouchableHighlight style={styles.openButton} onPress={()=>{
                             setModalVisible(!modalVisible);
                         }}>
                             <Text style={styles.textStyle}>X</Text>
                         </TouchableHighlight>
                         
-                        {location.completed ? <Text>All cleaned up :) </Text> : <TouchableHighlight style={{
-                          backgroundColor: '#148744', 
+                        {location.completed ? <Text style={styles.allCleaned}>All cleaned up :) </Text> : <TouchableHighlight style={{
+                          backgroundColor: '#1eb854', 
                           height: 45, 
-                          width: 120, 
+                          width: '90%', 
                           alignItems: 'center',
-                          borderRadius: 10,
+                          borderRadius: 25,
                           justifyContent: 'center',
                           marginTop: 20
                           }} onPress={async () => {
@@ -81,7 +81,7 @@ useEffect(() => {
                             alignSelf: 'center',
                             color: 'white',
                             fontSize: 18,
-                          }}>Task Done</Text>
+                          }}>Cleaned Up</Text>
                         </TouchableHighlight>}
                     </View>
                 </View>
@@ -133,18 +133,32 @@ const styles = StyleSheet.create({
     height: '80%'
   },
   openButton: {
+    flex: 1,
     backgroundColor: '#D65F56',
-    borderRadius: 30,
+    borderRadius: 100,
+    height: 50,
+    width: 50,
     padding: 15,
     elevation: 2,
     position: 'absolute',
     right: 10,
     top: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  uploadedBy: {
+    fontSize: 18,
+    marginBottom: 10
+  },
+  allCleaned: {
+    fontSize: 18,
+    marginTop: 20
   },
   textStyle: {
     color: "white",
     fontWeight: "bold",
-    textAlign: "center"
+    textAlign: "center",
+    fontSize: 18
   },
   modalText: {
     marginBottom: 15,
