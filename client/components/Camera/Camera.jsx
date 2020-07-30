@@ -72,13 +72,13 @@ const CameraView = ({user}) => {
                   const parsed = await response.json();
                   if(parsed.responses[0].safeSearchAnnotation.adult === 'VERY_LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.adult === 'LIKELY'
-                    || parsed.responses[0].safeSearchAnnotation.adult === 'POSSIBLE'
+               
                     || parsed.responses[0].safeSearchAnnotation.racy === 'VERY_LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.racy === 'LIKELY'
-                    || parsed.responses[0].safeSearchAnnotation.racy === 'POSSIBLE'
+                  
                     || parsed.responses[0].safeSearchAnnotation.violence === 'VERY_LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.violence === 'LIKELY'
-                    || parsed.responses[0].safeSearchAnnotation.violence === 'POSSIBLE'
+                   
                   
                     ) {
                       alert('Your image is not appropriate. Please try again')

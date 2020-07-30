@@ -4,8 +4,6 @@ import axios from 'axios'
 
 const RegisterUser = ({navigation}) => {
 const [username, setUsername] = useState('')
-const [firstName, setFirstName] = useState('')
-const [lastName, setLastName] = useState('')
 const [email, setEmail] = useState('')
 const [ password, setPassword ] = useState('')
 
@@ -15,8 +13,6 @@ const register = () => {
     url: 'https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users/',
     data: {
       username: username,
-      firstName: firstName,
-      lastName: lastName,
       email: email,
       password: password,
       karmaPoints: 0
@@ -37,25 +33,12 @@ const register = () => {
         style={styles.input}
         />
         <TextInput
-        value={firstName}
-        onChangeText={(firstName)=> setFirstName(firstName)}
-        placeholder={'First Name'}
-        placeholderTextColor="lightgrey"
-        style={styles.input}
-        />
-        <TextInput
-        value={lastName}
-        onChangeText={(lastName)=> setLastName(lastName)}
-        placeholder={'Last Name'}
-        placeholderTextColor="lightgrey"
-        style={styles.input}
-        />
-        <TextInput
         value={email}
         onChangeText={(email)=> setEmail(email)}
         placeholder={'Email'}
         placeholderTextColor="lightgrey"
         style={styles.input}
+        autoCapitalize = 'none'
         />
         <TextInput
         value={password}
@@ -93,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1eb854',
     height: 45,
     width: '80%',
-    marginTop: 20,
+    marginTop: 60,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -143,8 +126,7 @@ button2: {
   },
   header: {
     fontSize: 35,
-
-    marginBottom: 50,
+    marginBottom: 100,
     color: 'lightgrey'
   }
   });

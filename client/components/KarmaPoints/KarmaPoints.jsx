@@ -30,9 +30,10 @@ const KarmaPoints = () => {
       <FlatList 
       data={sortedPoints}
       renderItem={({ item }) =>
+      
        <View style={styles.row}>
          <View style={styles.userContainer}>
-         <Image style={styles.image} source={{uri: 'https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_1280.jpg'}} />
+         <Image style={styles.image} source={{uri: item.profilePicture}} />
         <Text style={styles.username}>{item.username}</Text>
         </View>
         <Text style={styles.karmaPoints}>{item.karmaPoints}</Text>

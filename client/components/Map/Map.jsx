@@ -41,7 +41,7 @@ useEffect(() => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                     <Text style={styles.modalText}>{}</Text>
-                      <Text style={styles.uploadedBy}>Tagged by {location.user}</Text>
+                      <Text style={styles.uploadedBy}>Tagged by Calle</Text>
                       <Image style={{ height: 300, width: 250 }} source={{ uri: location.uri }} resizeMode="cover" />
                     
                         <TouchableHighlight style={styles.openButton} onPress={()=>{

@@ -38,7 +38,7 @@ const Profile = ({user, setIsLoggedIn}) => {
       {userData.length === 0 ? <Text style={styles.loading}>Loading...</Text> :
       <View style={styles.userInfo}>
         <View style={styles.header}>
-        <Image style={styles.picture} source={{ uri: 'https://cdn.pixabay.com/photo/2020/03/28/15/20/cat-4977436_1280.jpg' }} resizeMode="cover" />
+        <Image style={styles.picture} source={{ uri: userData.profilePicture }} resizeMode="cover" />
         <Text style={styles.username}>{userData.username}</Text>
         <Text style={styles.userText}>Karma Points: {userData.karmaPoints}</Text>
       </View>

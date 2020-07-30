@@ -7,7 +7,6 @@ function Login( {setIsLoggedIn, setUser, user, navigation} ) {
 
   const [ password, setPassword ] = useState('')
 
-
 const onLogin = () => {
   Axios.get(`https://us-central1-trash-2b5de.cloudfunctions.net/app/api/users/${user}`)
   .then(res => {
@@ -77,7 +76,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#1eb854',
     height: 45,
     width: '80%',
-    marginTop: 20,
+    marginTop: 60,
     shadowOffset: {
       width: 0,
       height: 1,
@@ -117,7 +116,8 @@ button2: {
   },
   logo: {
     width: 150,
-    height: 150
+    height: 150,
+    marginTop: -80
   },
   input: {
     fontSize: 20,
@@ -132,7 +132,7 @@ button2: {
   header: {
     fontSize: 40,
     fontWeight: "bold",
-    marginBottom: 100,
+    marginBottom: 80,
     color: 'lightgrey'
   }
   });

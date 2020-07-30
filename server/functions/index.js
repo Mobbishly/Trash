@@ -97,8 +97,6 @@ app.get('/api/locations', (req, res) => {
               await db.collection('users').doc('/' + req.body.username + '/')
               .create({
                 username: req.body.username,
-                firstName: req.body.firstName,
-                lastName: req.body.lastName,
                 email: req.body.email,
                 karmaPoints: req.body.karmaPoints,
                 password: req.body.password,
@@ -121,10 +119,9 @@ app.get('/api/locations', (req, res) => {
                 for (let doc of docs) {
                     const selectedUsers = {
                         email: doc.data().email,
-                        firstName: doc.data().firstName,
                         karmaPoints: doc.data().karmaPoints,
-                        lastName: doc.data().lastName,
                         username: doc.data().username,
+                        profilePicture: doc.data().profilePicture
                     };
                     response.push(selectedUsers);
                 }
@@ -146,11 +143,10 @@ app.get('/api/locations', (req, res) => {
                 let doc = querySnapshot.data();
                     const selectedUser = {
                         username: doc.username,
-                        firstName: doc.firstName,
-                        lastName: doc.lastName,
                         email: doc.email,
                         karmaPoints: doc.karmaPoints,
-                        password: doc.password
+                        password: doc.password,
+                        profilePicture: doc.profilePicture
                     };
                     response.push(selectedUser);
                 
