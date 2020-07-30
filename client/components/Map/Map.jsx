@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
     elevation: 5,
     width: '90%',
-    height: '80%'
+    height: '70%'
   },
   openButton: {
     flex: 1,

@@ -6,7 +6,6 @@ import * as Location from 'expo-location';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import firebase from '../../firebase.js'
-import { preventAutoHide } from 'expo/build/launch/SplashScreen';
 import * as Progress from 'react-native-progress';
 
 const CameraView = ({user}) => {
@@ -30,14 +29,12 @@ const CameraView = ({user}) => {
         try {
             const response = await fetch(photo.uri);
             const blob = await response.blob();
-
-            //converting blob to base 64
             var reader = new FileReader();
             reader.readAsDataURL(blob); 
             reader.onloadend = function() {
                 var base64data = reader.result;            
            
-                const API_KEY = 'AIzaSyByFev4TGGQQW9leJiMUTdtfGl_YD4Jnb8';
+                const API_KEY = '[Your API Key]';
                 const API_URL = `https://vision.googleapis.com/v1/images:annotate?key=${API_KEY}`
                 
                 async function callGoogleVisionAsync(image) {
@@ -48,10 +45,6 @@ const CameraView = ({user}) => {
                           content: image,
                         },
                         features: [
-                          // {
-                          //   type: 'LABEL_DETECTION',
-                          //   maxResults: 5,
-                          // },
                           {
                             type: "SAFE_SEARCH_DETECTION",
                             maxResults: 1
@@ -78,6 +71,7 @@ const CameraView = ({user}) => {
                   
                     || parsed.responses[0].safeSearchAnnotation.violence === 'VERY_LIKELY'
                     || parsed.responses[0].safeSearchAnnotation.violence === 'LIKELY'
+                    || parsed.responses[0].safeSearchAnnotation.violence === 'POSSIBLE'
                    
                   
                     ) {
