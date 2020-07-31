@@ -2,9 +2,9 @@ Trash Tagger is an app which enables users to geo tag littered locations among o
 
 ## Installation
 
-cd client
-npm i
-npm start
+cd client  
+npm i  
+npm start  
 
 ## License
 MIT
